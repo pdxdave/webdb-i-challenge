@@ -4,6 +4,9 @@ const express = require('express');
 // create express server
 const server = express();
 
+// middleware
+server.use(express.json());
+
 // link to account model
 const AccountModel = require('./data/accounts-model')
 
@@ -13,7 +16,7 @@ server.get('/', async (req, res) => {
     try {
         const am = await AccountModel.find()
         res.status(200).json(am)
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             message: "The account information could not be retrieved"
         })
@@ -38,7 +41,7 @@ server.post('/', async (req, res) => {
     try {
         const am = await AccountModel.add(req.body)
         res.status(201).json(am)
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             message: "Please provide all the content necessary"
         })
@@ -47,7 +50,7 @@ server.post('/', async (req, res) => {
 
 
 // UPDATE Account
-server.get('/:id', async (req, res) => {
+server.put('/:id', async (req, res) => {
     try {
         const am = await AccountModel.update(req.params.id, req.body)
         if (am) {
@@ -57,7 +60,7 @@ server.get('/:id', async (req, res) => {
                 message: "The account wit hthe specified ID does not exist"
             })
         }
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             message: "The account information could not be modified"
         })
@@ -77,7 +80,7 @@ server.delete('/:id', async (req, res) => {
                 message: "The account with the specific ID does not exist"
             })
         }
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             message: "The account could not be removed"
         })
